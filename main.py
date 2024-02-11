@@ -33,23 +33,25 @@ def main():
     if os.path.exists(musicdir) != True:
             os.mkdir(musicdir)
 
-
     print("Favorites: " + str(tracks_count) + " tracks")
+  
     for count, track in enumerate(tracks):
         print("\nFetching info...")
+      
         obj = YouTube.from_id(track[0])
         name =  f"{obj.title} - {obj.author}"
         filename = f"{name}.webm" # todo: выбор формата webm/m4a
         stream = obj.streams.get_by_itag(251)
         size = str(stream.filesize_mb)
         size_bytes = stream.filesize
+      
         print(f"Downloading track: {name} ({count + 1} of {tracks_count})")
         print(f"Size: {str(size)} MB")
+      
         if os.path.isfile(musicdir + filename) == True and os.path.getsize(musicdir + filename) == size_bytes: # проверка на то что файл не битый и существует, иначе пропускаем
             print("File exist, skipping...")
             continue
-
-        
+          
         stream.download(filename=filename, output_path=musicdir)
 
     db.close()
