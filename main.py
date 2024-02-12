@@ -40,7 +40,7 @@ def main():
     if not os.path.exists(musicdir):
         os.mkdir(musicdir)
 
-    print(f"Favorites: {tracks_count} tracks")
+    print(f"Favorites: {str(tracks_count)} tracks")
 
     for count, track in enumerate(tracks):
         print("\nFetching info...")
@@ -53,7 +53,7 @@ def main():
         size_bytes = stream.filesize
 
         print(f"Downloading track: {name} ({count + 1} of {tracks_count})")
-        print(f"Size: {size} MB")
+        print(f"Size: {str(size)} MB")
 
         # проверка на то что файл не битый и существует, иначе пропускаем
         if (
