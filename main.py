@@ -40,7 +40,7 @@ def main():
     if not os.path.exists(musicdir):
         os.mkdir(musicdir)
 
-    print(f"Favorites: {tracks_count} tracks")
+    print(f"Favorites: {str(tracks_count)} tracks")
 
     for count, track in enumerate(tracks):
         print("\nFetching info...")
