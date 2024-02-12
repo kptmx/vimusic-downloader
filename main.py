@@ -1,6 +1,7 @@
 import argparse
 import os.path
 import sqlite3
+import sys
 from pathlib import Path
 
 from pytube import YouTube
@@ -9,7 +10,7 @@ from pytube import YouTube
 def main():
     parser = argparse.ArgumentParser(
         description=(
-            "Vimusic-downloader: download all favorite tracks"
+            "Vimusic-downloader: download all favorite tracks "
             "from ViMusic database (webm/opus format)"
         )
     )
@@ -17,8 +18,8 @@ def main():
     args = parser.parse_args()
 
     if not os.path.isfile(args.database):
-        print("File is not exist!")
-        exit(1)
+        print("File does'n exist!")
+        sys.exit(1)
 
     db = sqlite3.connect(args.database)
     db.row_factory = sqlite3.Row
@@ -27,14 +28,7 @@ def main():
     cursor.execute("SELECT id FROM Song WHERE likedAt <> '' ")
     tracks = cursor.fetchall()
 
-    cursor.execute("SELECT COUNT(likedAt) FROM Song")
-    tracks_count = 0
-    tracks_count1 = cursor.fetchall()  # костыляем
-
-    # лютий костыль, потому что sqlite3.Row возвращает адрес в памяти,
-    # если к нему обращаться напрямую
-    for counts in tracks_count1:
-        tracks_count = counts[0]
+    tracks_count = len(tracks)
 
     musicdir = str(Path.home()) + "/Music/"
     if not os.path.exists(musicdir):
@@ -60,7 +54,7 @@ def main():
             os.path.isfile(musicdir + filename)
             and os.path.getsize(musicdir + filename) == size_bytes
         ):
-            print("File exist, skipping...")
+            print("File exists, skipping...")
             continue
 
         stream.download(filename=filename, output_path=musicdir)
