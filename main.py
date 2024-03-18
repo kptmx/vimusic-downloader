@@ -27,6 +27,7 @@ def main():
 
     cursor.execute("SELECT id FROM Song WHERE likedAt <> '' ")
     tracks = cursor.fetchall()
+    db.close()
 
     tracks_count = len(tracks)
 
@@ -40,12 +41,12 @@ def main():
         print("\nFetching info...")
 
         obj = YouTube.from_id(track[0])
+        
         name = f"{obj.title} - {obj.author}"
         filename = f"{name}.webm"  # todo: выбор формата webm/m4a
         stream = obj.streams.get_by_itag(251)
         size = str(stream.filesize_mb)
         size_bytes = stream.filesize
-
         print(f"Downloading track: {name} ({count + 1} of {tracks_count})")
         print(f"Size: {size} MB")
 
@@ -58,8 +59,7 @@ def main():
             continue
 
         stream.download(filename=filename, output_path=musicdir)
-
-    db.close()
+        print(f"Done! Saved as {musicdir + filename}")
 
 
 if __name__ == "__main__":
